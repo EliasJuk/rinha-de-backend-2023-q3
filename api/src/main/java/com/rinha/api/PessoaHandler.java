@@ -16,14 +16,11 @@ public class PessoaHandler extends RequestHandler {
 
 	@Override
 	protected String handleRequest(HttpExchange exchange) throws IOException {
-		switch (exchange.getRequestMethod()) {
-			case "POST":
-				return createPessoa(exchange);
-			case "GET":
-				return getPessoas(exchange);
-			default:
-				return "Método não suportado";
-		}
+    return switch (exchange.getRequestMethod()) {
+      case "POST" -> createPessoa(exchange);
+      case "GET" -> getPessoas(exchange);
+      default -> "Método não suportado";
+    };
 	}
 
 	private String createPessoa(HttpExchange exchange) throws IOException {
