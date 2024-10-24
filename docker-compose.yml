@@ -1,0 +1,20 @@
+version: '3.5'
+
+services:
+  db: # Banco de dados PostgreSQL
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: rinhadb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: '1.5GB'
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - app-network
