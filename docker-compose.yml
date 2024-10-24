@@ -1,16 +1,46 @@
 version: '3.5'
 
 services:
-  db: # Banco de dados PostgreSQL
-    image: postgres:latest
-    environment:
-      POSTGRES_DB: rinhadb
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+  api1: # API - Instância 01
+    image: eliasjuk/rinha-backend:1.0
+    hostname: api1
+    depends_on:
+      - db
+    expose: # Expõe a porta dentro da rede interna do Docker.
+      - "80"
+    ports:
+      - "8081:8080"  # Porta 8081 no host mapeada para a porta 8080 no container
     deploy:
       resources:
         limits:
-          cpus: '0.75'
+          cpus: '0.30'
+          memory: '0.5GB'
+    networks:
+      - app-network
+
+  api2: # API - Instância 02
+    image: eliasjuk/rinha-backend:1.0
+    hostname: api2
+    depends_on:
+      - db
+    expose: # Expõe a porta dentro da rede interna do Docker.
+      - "80"
+    ports:
+      - "8082:8080"  # Porta 8082 no host mapeada para a porta 8080 no container
+    deploy:
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: '0.5GB'
+    networks:
+      - app-network
+
+  db: # Banco de dados PostgreSQL
+    image: postgres:latest
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
           memory: '1.5GB'
     ports:
       - "5432:5432"
@@ -18,3 +48,9 @@ services:
       - db-data:/var/lib/postgresql/data
     networks:
       - app-network
+
+volumes:
+  db-data:
+
+networks:
+  app-network:
